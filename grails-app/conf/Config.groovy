@@ -59,8 +59,6 @@ grails.exceptionresolver.params.exclude = ['password']
 // configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
 grails.hibernate.cache.queries = false
 
-//downloadInfo.statistics.file.path = File.separator + 'WEB-INF' + File.separator + 'downloadInfoStats.txt'
-downloadInfo.statistics.file.path = 'downloadInfoStats.txt'
 environments {
     development {
         grails.logging.jul.usebridge = true
@@ -75,9 +73,9 @@ environments {
 log4j = {
     // Example of changing the log pattern for the default console appender:
     //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+    appenders {
+        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+    }
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
@@ -90,4 +88,16 @@ log4j = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+   root {
+       warn   'stdout', 'file'
+       warn   'org.series.crawler',
+              'seriescrawler'
+   }
 }
+grails.views.javascript.library="jquery"
+quartz.monitor.layout='main'
+quartz.monitor.showTriggerNames=true
+quartz.monitor.showCountdown=true
+quartz.monitor.showTickingClock=true
+//downloadInfo.statistics.file.path = File.separator + 'WEB-INF' + File.separator + 'downloadInfoStats.txt'
+htmls.folder = 'resources/htmls/'

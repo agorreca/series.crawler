@@ -29,3 +29,4 @@ tomcat-*
 */.classpath
 */target/
 *.xdsl
+/target-eclipse/
