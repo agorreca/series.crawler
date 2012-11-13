@@ -38,60 +38,70 @@ public class HTTP {
 	protected static TorNetLayer torNetLayer;
 	protected static final Log log = LogFactory.getLog(HTTP.class);
 	private static String MESSAGE = "    ====== Getting information of external website: ${URL} =====";
+	private Boolean anonymous = Boolean.FALSE;
 
 	public HTTP() {
+		this(Boolean.FALSE);
 		// this.handler = getNewIdentity();
 	}
 
+	public HTTP(Boolean anonymous) {
+		this.anonymous = anonymous;
+	}
+
 	synchronized public URLStreamHandler getNewIdentity() throws IOException {
-		// do it only once
-		// if (loggingTcpipNetLayer == null) {
-		// create TCP/IP layer
-		NetLayer tcpipNetLayer = new TcpipNetLayer();
-		loggingTcpipNetLayer = new LoggingNetLayer(tcpipNetLayer, "upper tcpip  ");
-		NetFactory.getInstance().registerNetLayer(NetLayerIDs.TCPIP, loggingTcpipNetLayer);
+		if (this.anonymous) {
+			// do it only once
+			// if (loggingTcpipNetLayer == null) {
+			// create TCP/IP layer
+			NetLayer tcpipNetLayer = new TcpipNetLayer();
+			loggingTcpipNetLayer = new LoggingNetLayer(tcpipNetLayer, "upper tcpip  ");
+			NetFactory.getInstance().registerNetLayer(NetLayerIDs.TCPIP, loggingTcpipNetLayer);
 
-		// create TLS/SSL over TCP/IP layer
-		TLSNetLayer tlsNetLayer = new TLSNetLayer(loggingTcpipNetLayer);
-		loggingTlsNetLayer = new LoggingNetLayer(tlsNetLayer, "upper tls/ssl");
-		NetFactory.getInstance().registerNetLayer(NetLayerIDs.TLS_OVER_TCPIP, loggingTlsNetLayer);
+			// create TLS/SSL over TCP/IP layer
+			TLSNetLayer tlsNetLayer = new TLSNetLayer(loggingTcpipNetLayer);
+			loggingTlsNetLayer = new LoggingNetLayer(tlsNetLayer, "upper tls/ssl");
+			NetFactory.getInstance().registerNetLayer(NetLayerIDs.TLS_OVER_TCPIP, loggingTlsNetLayer);
 
-		// create TCP/IP layer for directory access (use different layer here to get different logging output)
-		NetLayer tcpipDirNetLayer = new TcpipNetLayer();
-		NetLayer loggingTcpipDirNetLayer = new LoggingNetLayer(tcpipDirNetLayer, "upper tcpip tor-dir  ");
+			// create TCP/IP layer for directory access (use different layer here to get different logging output)
+			NetLayer tcpipDirNetLayer = new TcpipNetLayer();
+			NetLayer loggingTcpipDirNetLayer = new LoggingNetLayer(tcpipDirNetLayer, "upper tcpip tor-dir  ");
 
-		// create Tor over TLS/SSL over TCP/IP layer
-		torNetLayer = new TorNetLayer(loggingTlsNetLayer, /* loggingT */tcpipDirNetLayer,
-				TempfileStringStorage.getInstance());
-		NetFactory.getInstance().registerNetLayer(NetLayerIDs.TOR_OVER_TLS_OVER_TCPIP, torNetLayer);
-		torNetLayer.waitUntilReady();
-		// }
+			// create Tor over TLS/SSL over TCP/IP layer
+			torNetLayer = new TorNetLayer(loggingTlsNetLayer, /* loggingT */tcpipDirNetLayer,
+					TempfileStringStorage.getInstance());
+			NetFactory.getInstance().registerNetLayer(NetLayerIDs.TOR_OVER_TLS_OVER_TCPIP, torNetLayer);
+			torNetLayer.waitUntilReady();
+			// }
 
-		// refresh net layer registration
-		NetFactory.getInstance().registerNetLayer(NetLayerIDs.TCPIP, loggingTcpipNetLayer);
-		NetFactory.getInstance().registerNetLayer(NetLayerIDs.TLS_OVER_TCPIP, loggingTlsNetLayer);
-		NetFactory.getInstance().registerNetLayer(NetLayerIDs.TOR_OVER_TLS_OVER_TCPIP, torNetLayer);
+			// refresh net layer registration
+			NetFactory.getInstance().registerNetLayer(NetLayerIDs.TCPIP, loggingTcpipNetLayer);
+			NetFactory.getInstance().registerNetLayer(NetLayerIDs.TLS_OVER_TCPIP, loggingTlsNetLayer);
+			NetFactory.getInstance().registerNetLayer(NetLayerIDs.TOR_OVER_TLS_OVER_TCPIP, torNetLayer);
 
-		// // classic: TcpipNetLayer with NetLayerIDs.TCPIP (--> HTTP over plain TCP/IP)
-		// // anonymous: TorNetLayer with NetLayerIDs.TOR (--> HTTP over TCP/IP over Tor network)
-		// // NetLayer lowerNetLayer = NetFactory.getInstance().getNetLayerById(NetLayerIDs.TCPIP);
-		// NetLayer torNetLayer = NetFactory.getInstance().getNetLayerById(NetLayerIDs.TOR);
-		// torNetLayer.clear();
-		//
-		// // wait until TOR is ready (optional) - this is only relevant for anonymous communication:
-		// torNetLayer.waitUntilReady();
+			// // classic: TcpipNetLayer with NetLayerIDs.TCPIP (--> HTTP over plain TCP/IP)
+			// // anonymous: TorNetLayer with NetLayerIDs.TOR (--> HTTP over TCP/IP over Tor network)
+			// // NetLayer lowerNetLayer = NetFactory.getInstance().getNetLayerById(NetLayerIDs.TCPIP);
+			// NetLayer torNetLayer = NetFactory.getInstance().getNetLayerById(NetLayerIDs.TOR);
+			// torNetLayer.clear();
+			//
+			// // wait until TOR is ready (optional) - this is only relevant for anonymous communication:
+			// torNetLayer.waitUntilReady();
 
-		// prepare URL handling on top of the lowerNetLayer
-		NetlibURLStreamHandlerFactory factory = new NetlibURLStreamHandlerFactory(false);
-		// the following method could be called multiple times
-		// to change layer used by the factory over the time:
-		factory.setNetLayerForHttpHttpsFtp(torNetLayer);
+			// prepare URL handling on top of the lowerNetLayer
+			NetlibURLStreamHandlerFactory factory = new NetlibURLStreamHandlerFactory(false);
+			// the following method could be called multiple times
+			// to change layer used by the factory over the time:
+			factory.setNetLayerForHttpHttpsFtp(torNetLayer);
 
-		// create the suitable URL object
-		log.debug("**********************");
-		log.warn("* NEW IDENTITY READY *");
-		log.debug("**********************");
-		return factory.createURLStreamHandler("http");
+			// create the suitable URL object
+			log.debug("**********************");
+			log.warn("* NEW IDENTITY READY *");
+			log.debug("**********************");
+			return factory.createURLStreamHandler("http");
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -111,8 +121,7 @@ public class HTTP {
 
 	protected URLConnection getURLConnection(String urlStr) {
 		log.debug(getDebugMessage(urlStr));
-		 return this.getTorHttpURLConnection(urlStr);
-//		return this.getHttpURLConnection(urlStr);
+		return anonymous ? this.getTorHttpURLConnection(urlStr) : this.getHttpURLConnection(urlStr);
 	}
 
 	protected String getDebugMessage(String urlStr) {

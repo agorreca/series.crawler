@@ -20,7 +20,7 @@ class DownloadInfoSchedulerJob {
 		 */
 //		cron name: 'DownloadInfo1', cronExpression: '0 0 0,3,6,9,12,15,18,21 * * ?'
 //		cron name: 'DownloadInfo2', cronExpression: '0 30 1,4,7,10,13,16,19,22 * * ?'
-//		cron name: 'DownloadInfo', cronExpression: '* 0/20/40 * * * ?'
+		cron name: 'DownloadInfo', cronExpression: '* 20 * * * ?'
 	}
 
 	def execute() {

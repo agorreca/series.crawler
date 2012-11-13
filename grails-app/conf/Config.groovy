@@ -89,11 +89,12 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
    root {
-       warn   'stdout', 'file'
-       warn   'org.series.crawler',
+       info   'stdout', 'file'
+       info   'org.series.crawler',
               'seriescrawler'
    }
 }
+downloadInfo.statistics.file.path = 'downloadInfoStats.txt'
 grails.views.javascript.library="jquery"
 quartz.monitor.layout='main'
 quartz.monitor.showTriggerNames=true
