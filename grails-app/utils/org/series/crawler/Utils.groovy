@@ -21,7 +21,6 @@ class Utils {
 	}
 
 	public static def getBannedServers() {
-//		fileToArray(grailsApplication.config.banned.servers.file.path)
-		fileToArray('bannedServers.txt')
+		fileToArray(ApplicationContextHolder.grailsApplication.config.banned.servers.file.path)
 	}
 }

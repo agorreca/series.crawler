@@ -1,13 +1,10 @@
 package org.series.crawler.site
 
 import org.apache.commons.logging.LogFactory
+import org.series.crawler.ApplicationContextHolder
 import org.series.crawler.HTTP
-import org.springframework.beans.factory.annotation.Autowired
 
 abstract class Site {
-
-	@Autowired
-	protected grailsApplication
 	protected static final log = LogFactory.getLog(this)
 	protected http = new HTTP();
 	protected keepProcessing = Boolean.TRUE
@@ -33,10 +30,11 @@ abstract class Site {
 	}
 
 	protected htmlText(urlStr) {
-		def htmlFilePath = grailsApplication.config.htmls.folder.concat(URLToFilename(urlStr))
+		def htmlFilePath = ApplicationContextHolder.grailsApplication.config.htmls.folder.concat(URLToFilename(urlStr))
 		File file = new File(htmlFilePath)
 		if (!file.exists()) {
 			String page = http.getURL(urlStr)
+			log.info ' >> Saving page to file'
 			file.createNewFile()
 			file.write(page)
 		}

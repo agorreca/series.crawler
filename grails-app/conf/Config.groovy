@@ -89,7 +89,7 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
    root {
-       info   'stdout', 'file'
+       error   'stdout', 'file'
        info   'org.series.crawler',
               'seriescrawler'
    }

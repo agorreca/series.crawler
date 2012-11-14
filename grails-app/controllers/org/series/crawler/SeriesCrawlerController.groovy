@@ -12,10 +12,7 @@ class SeriesCrawlerController {
 	}
 
 	def fetch() {
-		sites.each {
-			println "Fetching ${it.name()} from ${it.url()} ..."
-			it.parse()
-		}
+		CrawlerUtils.crawlSites(sites)
 		redirect(action: "show")
 	}
 

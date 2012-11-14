@@ -1,3 +1,7 @@
-// Place your Spring DSL code here
+import org.series.crawler.ApplicationContextHolder
+
 beans = {
+	applicationContextHolder(ApplicationContextHolder) { bean ->
+		bean.factoryMethod = 'getInstance'
+	}
 }

@@ -1,6 +1,7 @@
 package org.series.crawler
 
 import org.apache.commons.logging.LogFactory
+import org.series.crawler.CrawlerUtils;
 
 class DownloadInfoSchedulerJob {
 
@@ -23,10 +24,6 @@ class DownloadInfoSchedulerJob {
 	}
 
 	def execute() {
-		def sites = [new TvLinks()]
-		sites.each {
-			log.info "Fetching ${it.name()} from ${it.url()} ..."
-			it.parse()
-		}
+		CrawlerUtils.crawlSites()
 	}
 }
