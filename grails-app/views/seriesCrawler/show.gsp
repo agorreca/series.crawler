@@ -16,6 +16,7 @@ small {
 </head>
 
 <body>
+<div style="float:right"><g:link action="clean">Clean</g:link></div>
 <div style="float:right"><g:link action="fetch">Fetch</g:link></div>
 	<ul>
 		<g:each in="${ providers.sort{a,b-> a.name.toLowerCase().compareTo(b.name.toLowerCase())} }"
@@ -51,11 +52,13 @@ small {
 														</small>
 													</h4>
 													<ul>
-														<g:each
-															in="${ episode.downloadInfo.sort{a,b-> a.downloadLink.toLowerCase().compareTo(b.downloadLink.toLowerCase())} }"
-															var="info">
+														<g:set var="lastLink" value="" />
+														<g:each in="${ episode.downloadInfo.findAll{ it.downloadLink != null }.sort{a,b-> a.downloadLink.toLowerCase().compareTo(b.downloadLink.toLowerCase())} }" var="info">
+														<g:if test="${lastLink != info.downloadLink}">
 															<li><a href="${info.downloadLink}"> ${info.downloadLink}
 															</a></li>
+															<g:set var="lastLink" value="${info.downloadLink}" />
+														</g:if>
 														</g:each>
 													</ul>
 											</g:each>

@@ -30,9 +30,6 @@ public class HTTP {
 	/**
 	 * The URL of the file we want to fetch.
 	 */
-	private URL url;
-	private URLConnection urlConnection;
-	private URLStreamHandler handler;
 	protected static NetLayer loggingTcpipNetLayer;
 	protected static NetLayer loggingTlsNetLayer;
 	protected static TorNetLayer torNetLayer;
@@ -51,6 +48,7 @@ public class HTTP {
 
 	synchronized public URLStreamHandler getNewIdentity() throws IOException {
 		if (this.anonymous) {
+			log.info("      -----> GETTING NEW IDENTITY");
 			// do it only once
 			// if (loggingTcpipNetLayer == null) {
 			// create TCP/IP layer
@@ -152,7 +150,7 @@ public class HTTP {
 	public boolean checkHttpUrl(String urlStr) {
 		try {
 			log.debug(getDebugMessage(urlStr));
-			this.url = parseURLString(urlStr);
+			URL url = parseURLString(urlStr);
 			HttpURLConnection huc = (HttpURLConnection) url.openConnection();
 			int response = huc.getResponseCode();
 			if (response == 200)
@@ -226,8 +224,7 @@ public class HTTP {
 		HttpURLConnection urlConnection = null;
 		try {
 			URL context = null;
-			URL url = new URL(context, urlStr, this.handler);
-			this.url = url;
+			URL url = new URL(context, urlStr, this.getNewIdentity());
 
 			// /////////////////////////////////////////////
 			// the rest of this method is as for every java.net.URL object,
@@ -257,8 +254,7 @@ public class HTTP {
 			e.printStackTrace();
 		}
 
-		this.urlConnection = urlConnection;
-		return this.urlConnection;
+		return urlConnection;
 	}
 
 	private URLConnection getHttpURLConnection(String urlStr) {

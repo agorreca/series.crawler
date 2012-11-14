@@ -30,3 +30,5 @@ tomcat-*
 */target/
 *.xdsl
 /target-eclipse/
+.classpath
+.project

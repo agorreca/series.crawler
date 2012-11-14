@@ -95,6 +95,7 @@ log4j = {
    }
 }
 downloadInfo.statistics.file.path = 'downloadInfoStats.txt'
+banned.servers.file.path = 'bannedServers.txt'
 grails.views.javascript.library="jquery"
 quartz.monitor.layout='main'
 quartz.monitor.showTriggerNames=true
