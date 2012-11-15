@@ -7,11 +7,7 @@ class UrlMappings {
 			}
 		}
 
-		"/" {
-			controller = 'seriesCrawler'
-			action = [GET:'show']
-		}
-
+		"/"(controller:'public',action:'show')
 		"500"(view:'/error')
 	}
 }

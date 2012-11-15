@@ -6,6 +6,7 @@ import org.series.crawler.site.TvLinks
 class SeriesCrawlerController {
 
 	def sites = [new TvLinks(), new Cucirca()]
+//	def sites = [new Cucirca()]
 
 	def show() {
 		[providers:Provider.all]
@@ -13,7 +14,8 @@ class SeriesCrawlerController {
 
 	def fetch() {
 		CrawlerUtils.crawlSites(sites)
-		redirect(action: "show")
+		render 'LISTO'
+//		redirect(action: "show")
 	}
 
 	def clean() {

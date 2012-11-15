@@ -16,7 +16,8 @@ import org.series.crawler.Utils;
 class TvLinks extends Site {
 
 //	def seriesToDownload = ['Touch']
-	def seriesToDownload = ['The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
+	def seriesToDownload = ['Touch','Dexter','The Vampire Diaries','Once Upon a Time']
+//	seriesToDownload << 'The Big Bang Theory'
 	def baseURL = 'http://www.tv-links.eu'
 	def name() {'TvLinks'}
 	def url()  {'http://www.tv-links.eu/tv-shows/all_links'}
@@ -89,7 +90,7 @@ class TvLinks extends Site {
 				String location = http.getHeaderField(gateway, 'Location')
 				if (location) {
 					log.info "      --> Inner link: ${gateway} resolved as ${location} ..."
-					def validLocation =  !Utils.inBannedServers(location) ? location : null
+					def validLocation = !Utils.inBannedServers(location) ? location : null
 					def downloadInfo = new DownloadInfo(gateway:gateway,downloadLink:validLocation,episode:episode).save(failOnError:true)
 					episode.downloadInfo << 
 					season.episodes << episode.save(failOnError:true)

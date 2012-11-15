@@ -15,7 +15,7 @@ class Utils {
 	public static def inBannedServers(String location) {
 		def inBannedServer = Boolean.FALSE
 		Utils.getBannedServers().each {
-			if (StringUtils.startsWith(location, it)) return Boolean.TRUE
+			if (StringUtils.startsWith(location, it)) inBannedServer = Boolean.TRUE
 		}
 		inBannedServer
 	}

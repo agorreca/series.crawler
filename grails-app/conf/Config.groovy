@@ -11,7 +11,7 @@
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
-grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
+grails.project.groupId = 'org.series.crawler' // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
 grails.mime.types = [
@@ -36,7 +36,7 @@ grails.mime.types = [
 grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*']
 
 // The default codec used to encode data with ${}
-grails.views.default.codec = "none" // none, html, base64
+grails.views.default.codec = "html" // none, html, base64
 grails.views.gsp.encoding = "UTF-8"
 grails.converters.encoding = "UTF-8"
 // enable Sitemesh preprocessing of GSP pages
@@ -90,8 +90,7 @@ log4j = {
            'net.sf.ehcache.hibernate'
    root {
        error   'stdout', 'file'
-       info   'org.series.crawler',
-              'seriescrawler'
+       info   'org.series.crawler.site'
    }
 }
 downloadInfo.statistics.file.path = 'downloadInfoStats.txt'
@@ -103,3 +102,9 @@ quartz.monitor.showCountdown=true
 quartz.monitor.showTickingClock=true
 //downloadInfo.statistics.file.path = File.separator + 'WEB-INF' + File.separator + 'downloadInfoStats.txt'
 htmls.folder = 'resources/htmls/'
+
+// Added by the Spring Security Core plugin:
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'org.series.crawler.User'
+grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'org.series.crawler.UserRole'
+grails.plugins.springsecurity.authority.className = 'org.series.crawler.Role'
+grails.plugins.springsecurity.successHandler.defaultHandlerUrl = '/home'

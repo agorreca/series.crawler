@@ -16,7 +16,7 @@ small {
 </head>
 
 <body>
-<div style="float:right"><g:link action="fetch">Fetch</g:link> | <g:link action="clean">Clean</g:link></div>
+<div style="float:right;top:60px"><g:link action="fetch">Fetch</g:link> | <g:link action="clean">Clean</g:link></div>
 	<g:if test="${ providers.size() > 0 }">
 	<ul>
 		<g:each in="${ providers.sort{a,b-> a.name.toLowerCase().compareTo(b.name.toLowerCase())} }"

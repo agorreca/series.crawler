@@ -1,3 +1,5 @@
+import grails.util.Environment
+
 import org.series.crawler.ApplicationContextHolder
 
 beans = {
