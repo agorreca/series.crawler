@@ -46,7 +46,7 @@ class TvLinks extends Site {
 	 		def season
 			html(url).'**'.find{ it.@class == 'z_title cfix brd_l_dot'}.'*'.findAll{it.name().equalsIgnoreCase('div') || it.name().equalsIgnoreCase('ul')}.each { 
 				if (it.name().equalsIgnoreCase('div') && StringUtils.startsWith(it.@id.text(), 'dv_snr')) {
-					def seasonNumber = Integer.parseInt(it.@id.text().replaceAll("[\\D]", ""))
+					def seasonNumber = Integer.parseInt(it.@id.text().replaceAll(/[\D]/,''))
 					log.info "     < Season ${seasonNumber} >"
 					season = Season.findByNumberAndSerie(seasonNumber,serie) ?: new Season(number:seasonNumber,serie:serie,episode:[]).save(failOnError:true)
 					serie.seasons << season
@@ -89,8 +89,8 @@ class TvLinks extends Site {
 			if (!DownloadInfo.findByGateway(gateway)) {
 				String location = http.getHeaderField(gateway, 'Location')
 				if (location) {
-					log.info "      --> Inner link: ${gateway} resolved as ${location} ..."
 					def validLocation = !Utils.inBannedServers(location) ? location : null
+					log.info "      --> Inner link: ${gateway} resolved as ${validLocation} (${location}) ..."
 					def downloadInfo = new DownloadInfo(gateway:gateway,downloadLink:validLocation,episode:episode).save(failOnError:true)
 					episode.downloadInfo << 
 					season.episodes << episode.save(failOnError:true)

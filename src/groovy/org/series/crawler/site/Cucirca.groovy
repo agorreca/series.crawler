@@ -1,5 +1,7 @@
 package org.series.crawler.site
 
+import java.util.regex.Matcher;
+
 import org.series.crawler.Episode
 import org.series.crawler.Provider
 import org.series.crawler.Season
@@ -34,23 +36,31 @@ class Cucirca extends Site {
 
 	private void processSerie(String url, Provider provider, String name) {
 		if (keepProcessing) {
-			def serie = Serie.findByName(name) ?: new Serie(name:name,released:released,seasons:[]).save(failOnError:true)
+			def serie = Serie.findByName(name) ?: new Serie(name:name,seasons:[]).save(failOnError:true)
 			html(url).'**'.findAll{ it.@class.text().startsWith('one_half') && it.@class.text().endsWith('flex_column')}.each {
-				def season
-				if (it.name().equalsIgnoreCase('h2')) {
-					season = it.find{it.name().toLowerCase().equalsIgnoreCase('a')}.text().replace('Season ', '') as Integer
+				if (it.'*'.size()) {
+					def nodeAux = it.'*'.find {it.name().equalsIgnoreCase('h2') || (it.name().equalsIgnoreCase('p') && it.text().contains('Season') && !it.text().contains('Episode'))}
+					def nodeAuxText =  nodeAux.text().contains('Season ') ? nodeAux.text() : nodeAux.childNodes().getAt(0).text()
+					def seasonNumber = Integer.parseInt(nodeAuxText.replaceAll(/[\D]/,''))
 					log.info "     < Season ${seasonNumber} >"
-					season = Season.findByNumberAndSerie(seasonNumber,serie) ?: new Season(number:seasonNumber,serie:serie,episode:[]).save(failOnError:true)
+					def season = Season.findByNumberAndSerie(seasonNumber,serie) ?: new Season(number:seasonNumber,serie:serie,episode:[]).save(failOnError:true)
 					serie.seasons << season
-				} else if (it.name().equalsIgnoreCase('p')) {
-					it.find{it.name().toLowerCase().equalsIgnoreCase('p')}.'*'.findAll{it.name().toLowerCase().equalsIgnoreCase('a') && it.@href.text()}.each { ep ->
+
+					it.'*'.find {it.name().equalsIgnoreCase('p') && it.text().contains('Episode')}.'*'.findAll{it.name().equalsIgnoreCase('a')}.each { ep ->
 						def episodeURL = ep.@href.text()
-						def nodeText = ep.text()
-						def matcher = nodeText =~ ~/Episode (.*?) (.*?)/
-						def number = matcher[0][1] as Integer
-						def episodeName = matcher[0][2]
+						def nodeText = ep.text().trim()
+						def number, episodeName
+						def matcher = nodeText =~ ~/Episode (.*?) (.*?)$/
+						log.info matcher ? "[${matcher[0][1]},${matcher[0][2]}]" : 'NO HAY NUMERO'
+						if (!matcher) {
+							number = 1
+							episodeName = nodeText
+						} else {
+							number = matcher[0][1] as Integer
+							episodeName = matcher[0][2]
+						}
 						log.info "    [Episode ${number}: ${episodeName}]"
-						processEpisode(provider, season, episodeURL, number, episodeName)
+//						processEpisode(provider, season, episodeURL, number, episodeName)
 					}
 				}
 			}
