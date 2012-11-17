@@ -7,7 +7,7 @@ class UrlMappings {
 			}
 		}
 
-		"/"(controller:'public',action:'show')
+		"/"(controller:'seriesCrawler',action:'show')
 		"500"(view:'/error')
 	}
 }

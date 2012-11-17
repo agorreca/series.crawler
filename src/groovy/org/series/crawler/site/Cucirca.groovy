@@ -51,16 +51,15 @@ class Cucirca extends Site {
 						def nodeText = ep.text().trim()
 						def number, episodeName
 						def matcher = nodeText =~ ~/Episode (.*?) (.*?)$/
-						log.info matcher ? "[${matcher[0][1]},${matcher[0][2]}]" : 'NO HAY NUMERO'
 						if (!matcher) {
-							number = 1
+							number = '1'
 							episodeName = nodeText
 						} else {
-							number = matcher[0][1] as Integer
+							number = matcher[0][1]
 							episodeName = matcher[0][2]
 						}
 						log.info "    [Episode ${number}: ${episodeName}]"
-//						processEpisode(provider, season, episodeURL, number, episodeName)
+						processEpisode(provider, season, episodeURL, number, episodeName)
 					}
 				}
 			}
@@ -68,19 +67,22 @@ class Cucirca extends Site {
 		}
 	}
 
-	private void processEpisode(Provider provider, Season season, String url, Integer number, String name) {
-		if (keepProcessing) {
+	private void processEpisode(Provider provider, Season season, String url, String number, String name) {
+//		if (keepProcessing) {
 			def episode = Episode.findByNumberAndNameAndSeason(number,name,season) ?: new Episode(number:number,name:name,season:season,released:null,downloadInfo:[]).save(failOnError:true)
-			if (episode.downloadInfo.size() <= DOWNLOAD_LINKS_LIMIT) {
-				log.info "      Processing episode ${number} at ${url} ..."
-				html(url).'**'.findAll{ it.@onclick =~ '.*frameLink.*'}.each{
-					def matcher = it.@onclick.text() =~ ~/'(.*?)'/
-					if (matcher.find()) {
-						def gateway = "${baseURL}/gateway.php?data=${matcher[0][1]}"
-						processDownloadInfo(provider,season,episode,gateway)
-					}
+//			if (episode.downloadInfo.size() <= DOWNLOAD_LINKS_LIMIT) {
+				log.info "      Processing episode ${number} [${name}] at ${url} ..."
+				html(url).'**'.findAll{ it.@class.text().startsWith('postTabs_divs')}.each{
+//					it.'*'.findAll{ it.name().equalsIgnoreCase('IFRAME')}.each {
+//						log.warn it.@src
+//					}
+//					def matcher = it.@onclick.text() =~ ~/'(.*?)'/
+//					if (matcher.find()) {
+//						def gateway = "${baseURL}/gateway.php?data=${matcher[0][1]}"
+//						processDownloadInfo(provider,season,episode,gateway)
+//					}
 				}
-			}
-		}
+//			}
+//		}
 	}
 }

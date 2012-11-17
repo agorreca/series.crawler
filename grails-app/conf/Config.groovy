@@ -77,6 +77,11 @@ log4j = {
         console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     }
 
+   root {
+       error   'stdout', 'file'
+       warn   'org.series.crawler.site'
+   }
+
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
@@ -85,13 +90,17 @@ log4j = {
            'org.codehaus.groovy.grails.commons',            // core / classloading
            'org.codehaus.groovy.grails.plugins',            // plugins
            'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
+           'org.codehaus.groovy.grails.scaffolding',      // hibernate integration
            'org.springframework',
+           'org.springframework.web',
+           'org.springframework.web.context',
            'org.hibernate',
-           'net.sf.ehcache.hibernate'
-   root {
-       error   'stdout', 'file'
-       info   'org.series.crawler.site'
-   }
+           'net.sf.ehcache.hibernate',
+           'net.sf.ehcache.config',
+           'org.grails.plugin.cache',
+		   'org.grails.plugin.resource',
+		   'org.grails.plugin.databasemigration',
+		   'WebxmlGrailsPlugin'
 }
 downloadInfo.statistics.file.path = 'downloadInfoStats.txt'
 banned.servers.file.path = 'bannedServers.txt'

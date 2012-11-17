@@ -53,7 +53,7 @@ class TvLinks extends Site {
 				} else if(it.name().equalsIgnoreCase('ul') && it.@class=='table_shows') {
 					it.'**'.findAll{it.@class && it.@class == 'list cfix' && it.@href.text()}.each{ ep ->
 						def episodeURL = "${baseURL}${ep.@href}video-results/"
-						def number = ep.SPAN[0].text().replace('Episode', '').trim() as Integer
+						def number = ep.SPAN[0].text().replace('Episode', '').trim()
 						def episodeName = ep.SPAN[1].text()
 						def airDate = ep.SPAN[2].text()
 						def releasedDate
@@ -67,7 +67,7 @@ class TvLinks extends Site {
 		}
 	}
 
-	private void processEpisode(Provider provider, Season season, String url, Integer number, String name, Date released) {
+	private void processEpisode(Provider provider, Season season, String url, String number, String name, Date released) {
 		if (keepProcessing) {
 			def episode = Episode.findByNumberAndNameAndSeason(number,name,season) ?: new Episode(number:number,name:name,season:season,released:released,downloadInfo:[]).save(failOnError:true)
 			if (episode.downloadInfo.size() <= DOWNLOAD_LINKS_LIMIT) {

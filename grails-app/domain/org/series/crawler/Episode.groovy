@@ -1,7 +1,7 @@
 package org.series.crawler
 
 class Episode {
-	Integer number
+	String number
 	String name
 	Date released
 
