@@ -15,7 +15,6 @@ import org.series.crawler.Utils;
 
 class TvLinks extends Site {
 
-//	def seriesToDownload = ['Touch']
 	def seriesToDownload = ['Touch','Dexter','The Vampire Diaries','Once Upon a Time']
 //	seriesToDownload << 'The Big Bang Theory'
 	def baseURL = 'http://www.tv-links.eu'
@@ -91,8 +90,7 @@ class TvLinks extends Site {
 				if (location) {
 					def validLocation = !Utils.inBannedServers(location) ? location : null
 					log.info "      --> Inner link: ${gateway} resolved as ${validLocation} (${location}) ..."
-					def downloadInfo = new DownloadInfo(gateway:gateway,downloadLink:validLocation,episode:episode).save(failOnError:true)
-					episode.downloadInfo << 
+					episode.downloadInfo << new DownloadInfo(gateway:gateway,downloadLink:validLocation,episode:episode).save(failOnError:true)
 					season.episodes << episode.save(failOnError:true)
 					def timestamp = new SimpleDateFormat('yyyy.MM.dd HH:mm:ss').format(new Date())
 					def serie = season.serie

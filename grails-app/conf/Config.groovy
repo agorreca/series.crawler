@@ -79,7 +79,7 @@ log4j = {
 
    root {
        error   'stdout', 'file'
-       warn   'org.series.crawler.site'
+       info   'org.series.crawler.site'
    }
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers

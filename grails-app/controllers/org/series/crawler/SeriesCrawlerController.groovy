@@ -9,12 +9,14 @@ class SeriesCrawlerController {
 	def tvLinks = new TvLinks()
 
 	def show() {
-		[providers:[Provider.findByName(cucirca.name())]]
+//		[providers:[Provider.findByName(tvLinks.name())]]
+		[providers:Provider.all]
 	}
 
 	def fetch() {
-		def sites = [tvLinks, cucirca]
+		def sites = [tvLinks,cucirca]
 //		sites = [cucirca]
+//		sites = [tvLinks]
 		CrawlerUtils.crawlSites(sites)
 		render 'LISTO'
 //		redirect(action: "show")
@@ -34,6 +36,7 @@ class SeriesCrawlerController {
 //				like('downloadLink', "${info}%")
 //			}*.delete()
 		}
-		redirect(action: "show")
+//		redirect(action: "show")
+		render "${count} registers deleted"
 	}
 }

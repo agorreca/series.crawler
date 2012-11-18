@@ -6,6 +6,7 @@ class DownloadInfo {
 
 	static belongsTo = [episode: Episode]
 	static constraints = {
+		gateway nullable:true
 		downloadLink nullable:true
 	}
 }
