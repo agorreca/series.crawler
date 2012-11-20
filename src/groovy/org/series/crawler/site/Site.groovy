@@ -8,7 +8,7 @@ abstract class Site {
 	protected static final log = LogFactory.getLog(this)
 	protected http = new HTTP();
 	protected keepProcessing = Boolean.TRUE
-	protected DOWNLOAD_LINKS_LIMIT = 5
+	protected DOWNLOAD_LINKS_LIMIT = 3
 
 	abstract def name()
 	abstract def url()

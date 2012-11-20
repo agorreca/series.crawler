@@ -32,3 +32,5 @@ tomcat-*
 /target-eclipse/
 .classpath
 .project
+/resources/htmls/*
+/resources/htmls

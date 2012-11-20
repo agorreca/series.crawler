@@ -15,7 +15,7 @@ import org.series.crawler.Utils;
 
 class TvLinks extends Site {
 
-	def seriesToDownload = ['Touch','Dexter','The Vampire Diaries','Once Upon a Time']
+	def seriesToDownload = ['Lie To Me', 'Touch','Dexter']//,'The Vampire Diaries','Once Upon a Time']
 //	seriesToDownload << 'The Big Bang Theory'
 	def baseURL = 'http://www.tv-links.eu'
 	def name() {'TvLinks'}

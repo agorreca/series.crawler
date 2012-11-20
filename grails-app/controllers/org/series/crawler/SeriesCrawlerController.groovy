@@ -44,7 +44,7 @@ class SeriesCrawlerController {
 	def fetch() {
 		def sites = [tvLinks,cucirca]
 //		sites = [cucirca]
-		sites = [tvLinks]
+//		sites = [tvLinks]
 		CrawlerUtils.crawlSites(sites)
 		render 'LISTO'
 //		redirect(action: "show")

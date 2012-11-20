@@ -13,7 +13,8 @@ import org.series.crawler.Utils
 class Cucirca extends Site {
 
 	def baseURL = 'http://www.cucirca.com/'
-	//def seriesToDownload = ['The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
+//	def seriesToDownload = ['The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
+	def seriesToDownload = ['Dexter']
 	def name() { 'Cucirca' }
 	def url()  { 'http://www.cucirca.com/' }
 	def serverURLReplacement = [
@@ -43,7 +44,8 @@ class Cucirca extends Site {
 				if (keepProcessing) {
 					if (it.@href.text()) {
 						def name = it.text().trim()
-						if (!(name in seriesWithProblems)) {
+						if (name in seriesToDownload) {
+//						if (!(name in seriesWithProblems)) {
 							def link = it.@href.text()
 							log.info "   Serie: ${name} at ${link}"
 							processSerie(link, provider, name)
