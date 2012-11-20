@@ -1,6 +1,6 @@
 package org.series.crawler
 
-import grails.converters.JSON
+import java.text.SimpleDateFormat
 
 import org.series.crawler.site.Cucirca
 import org.series.crawler.site.TvLinks
@@ -9,36 +9,30 @@ class SeriesCrawlerController {
 
 	def cucirca = new Cucirca()
 	def tvLinks = new TvLinks()
+	def seriesToShow = ['Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
 
 	def show() {
-//		[providers:[Provider.findByName(tvLinks.name())]]
-//		[providers:Provider.all]
-		def model = [:]
-		def episodeModel = [:]
-		def seasonModel = [:]
-		def serieModel = [:]
-//		def results = DownloadInfo.withCriteria {
-//			isNotNull('anotherDomainClass')
-//		}
-//		DownloadInfo.where {
-//			downloadLink != null
-//		}.list().each { downloadInfo ->
-//			episodeModel.put('number', downloadInfo.episode.number)
-//			episodeModel.put('name', downloadInfo.episode.name)
-//			episodeModel.put('released', downloadInfo.episode.released)
-//			episodeModel.put('')
-//		}
-
-		def episodeList = []
-		DownloadInfo.where { downloadLink != null }.list().each { it ->
-		  episodeModel = [name:it.episode.name,links:it.downloadLink]
-		  episodeList << episodeModel
+		def model = []
+		DownloadInfo.withCriteria {isNotNull('downloadLink')}.each {
+			if (it.episode.season.serie.name.toLowerCase() in seriesToShow.collect {it.toLowerCase()}) {
+				def formatter = new SimpleDateFormat('( dd-MM-yyyy )')
+				def serieReleased = it.episode.season.serie.released ? formatter.format(it.episode.season.serie.released) : ''
+				def episodeReleased = it.episode.released ? formatter.format(it.episode.released) : ''
+				def episodeNumber = it.episode.number ==~ /\d+/ ? String.format("%03d", it.episode.number as Integer) : ''
+				def seasonNumber = it.episode.season.number ==~ /\d+/ ? String.format("%02d", it.episode.season.number as Integer) : ''
+				model << [
+							link:it.downloadLink,
+							episodeName:"${episodeNumber}: ${it.episode.name} ${episodeReleased}",
+							seasonNumber:"Season ${seasonNumber}",
+							serieName:"${it.episode.season.serie.name} ${serieReleased}"
+						 ]
+			}
 		}
-
-		def list1 = episodeList.groupBy {it.name}
-		def list2 = episodeList.groupBy {it.name}.collect { it.value.collectEntries { it } }
-		render list2 as JSON
-
+		[model:model.groupBy({it.serieName},{it.seasonNumber},{it.episodeName}).each {serie,a->a.each{season,b->b.each{episode,c->c.each{
+			it.remove('serieName')
+			it.remove('seasonNumber')
+			it.remove('episodeName')
+		}}}}]
 	}
 
 	def fetch() {

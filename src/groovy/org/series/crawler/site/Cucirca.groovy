@@ -13,8 +13,6 @@ import org.series.crawler.Utils
 class Cucirca extends Site {
 
 	def baseURL = 'http://www.cucirca.com/'
-//	def seriesToDownload = ['The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
-	def seriesToDownload = ['Dexter']
 	def name() { 'Cucirca' }
 	def url()  { 'http://www.cucirca.com/' }
 	def serverURLReplacement = [
@@ -22,8 +20,9 @@ class Cucirca extends Site {
 		new ServerURLReplacement('(.*?)player/embed.php\\?.*?v=(.*?)&.*?$','$1v/$2'),
 		new ServerURLReplacement('(.*?)embed-(.*?)-.*html$','$1$2')
 	]
-//	def seriesToDownload = ['Touch','Dexter','The Vampire Diaries','Once Upon a Time', 'The Big Bang Theory']
-	def seriesWithProblems = ['How I Met Your Mother', 'One Tree Hill', 'Psych', 'The Simpsons', 'Two and a Half Men']
+	def seriesToDownload = ['Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
+	def seriesWithProblems = ['How I Met Your Mother', 'One Tree Hill', 'Psych', 'The Simpsons', 'Two and a Half Men','Army Wives','Medium', 'Nip Tuck', 'Numb3rs']
+	def lastProcessedSerie = seriesWithProblems.last()
 
 	class ServerURLReplacement {
 		def regexp, replacement
@@ -44,8 +43,8 @@ class Cucirca extends Site {
 				if (keepProcessing) {
 					if (it.@href.text()) {
 						def name = it.text().trim()
-						if (name in seriesToDownload) {
-//						if (!(name in seriesWithProblems)) {
+//						if (name in seriesToDownload && name > lastProcessedSerie) {
+						if (!(name in seriesWithProblems) && name > lastProcessedSerie) {
 							def link = it.@href.text()
 							log.info "   Serie: ${name} at ${link}"
 							processSerie(link, provider, name)
@@ -92,9 +91,9 @@ class Cucirca extends Site {
 		def episode = Episode.findByNumberAndNameAndSeason(number,name,season) ?: new Episode(number:number,name:name,season:season,released:null,downloadInfo:[]).save(failOnError:true)
 		log.info "      Processing episode ${number} [${name}] at ${url} ..."
 		html(url).'**'.findAll{ it.@class.text().startsWith('postTabs_divs')}.each{
-			it.'*'.findAll{ it.name().equalsIgnoreCase('IFRAME')}.each {
+			it.'**'.findAll{ it.name().equalsIgnoreCase('IFRAME')}.each {
 				def processServer = Boolean.TRUE
-				def link = it.@src.text()
+				def link = it.@src.text() ?: it.@SRC.text()
 				serverURLReplacement.each { replacer ->
 					def matcher = it.@src.text() =~ ~/${replacer.regexp}/
 					if (matcher && processServer) {
