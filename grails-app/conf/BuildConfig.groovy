@@ -39,22 +39,22 @@ grails.project.dependency.resolution = {
 
 	plugins {
 		runtime ":hibernate:$grailsVersion"
-		runtime ":jquery:1.8.2"
-		runtime ":resources:1.2.RC2"
-		runtime ":zipped-resources:1.0"
-		runtime ":cached-resources:1.0"
-		runtime ":yui-minify-resources:0.1.5"
-		runtime ':twitter-bootstrap:2.1.1'
-		runtime ':fields:1.3'
-		runtime ":database-migration:1.2"
-
-		compile ':cache:1.0.1'
-		compile ":cache-headers:1.1.5"
-		compile ":spring-security-core:1.2.7.3"
-		compile ":mail:1.0.1"
-		compile ":jquery-ui:1.8.24"
-		compile ":spring-security-ui:0.2"
-		compile ":famfamfam:1.0.1"
+//		runtime ":jquery:1.8.2"
+//		runtime ":resources:1.2.RC2"
+//		runtime ":zipped-resources:1.0"
+//		runtime ":cached-resources:1.0"
+//		runtime ":yui-minify-resources:0.1.5"
+//		runtime ':twitter-bootstrap:2.1.1'
+//		runtime ':fields:1.3'
+//		runtime ":database-migration:1.2"
+//
+//		compile ':cache:1.0.1'
+//		compile ":cache-headers:1.1.5"
+//		compile ":spring-security-core:1.2.7.3"
+//		compile ":mail:1.0.1"
+//		compile ":jquery-ui:1.8.24"
+//		compile ":spring-security-ui:0.2"
+//		compile ":famfamfam:1.0.1"
 		//compile ":spring-security-twitter:0.4.3"
 		//compile ":spring-security-facebook:0.9"
 

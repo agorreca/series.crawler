@@ -2,6 +2,7 @@ package org.series.crawler
 
 import java.text.SimpleDateFormat
 
+import org.series.crawler.site.AnimeFLV
 import org.series.crawler.site.Cucirca
 import org.series.crawler.site.TvLinks
 
@@ -9,7 +10,9 @@ class SeriesCrawlerController {
 
 	def cucirca = new Cucirca()
 	def tvLinks = new TvLinks()
-	def seriesToShow = ['Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
+	def animeFlv = new AnimeFLV()
+	def seriesToShow = ['Pretty Little Liars', 'Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
+	def providerToShow = ['Pretty Little Liars']
 
 	def show() {
 		def model = []
@@ -35,10 +38,15 @@ class SeriesCrawlerController {
 		}}}}]
 	}
 
+	def byProvider() {
+		[providers:[Provider.findByName('AnimeFLV')]]
+	}
+
 	def fetch() {
-		def sites = [tvLinks,cucirca]
+		def sites = [tvLinks,animeFlv,cucirca]
 //		sites = [cucirca]
 //		sites = [tvLinks]
+		sites = [animeFlv]
 		CrawlerUtils.crawlSites(sites)
 		render 'LISTO'
 //		redirect(action: "show")

@@ -8,7 +8,12 @@ abstract class Site {
 	protected static final log = LogFactory.getLog(this)
 	protected http = new HTTP();
 	protected keepProcessing = Boolean.TRUE
-	protected DOWNLOAD_LINKS_LIMIT = 3
+	protected DOWNLOAD_LINKS_LIMIT = 1
+	protected serverURLReplacement = [
+		new ServerURLReplacement('(.*?)embed(.*?)embed.php\\?.*?v=(.*?)&.*?$', '$1www$2video/$3'),
+		new ServerURLReplacement('(.*?)player/embed.php\\?.*?v=(.*?)&.*?$','$1v/$2'),
+		new ServerURLReplacement('(.*?)embed-(.*?)-.*html$','$1$2')
+	]
 
 	abstract def name()
 	abstract def url()

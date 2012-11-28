@@ -15,8 +15,7 @@ import org.series.crawler.Utils;
 
 class TvLinks extends Site {
 
-	def seriesToDownload = ['Lie To Me', 'Touch','Dexter']//,'The Vampire Diaries','Once Upon a Time']
-//	seriesToDownload << 'The Big Bang Theory'
+	def seriesToDownload = ['Lie To Me', 'Touch','Dexter','The Vampire Diaries','Once Upon a Time','The Big Bang Theory','Revolution']
 	def baseURL = 'http://www.tv-links.eu'
 	def name() {'TvLinks'}
 	def url()  {'http://www.tv-links.eu/tv-shows/all_links'}
@@ -70,13 +69,15 @@ class TvLinks extends Site {
 		if (keepProcessing) {
 			def episode = Episode.findByNumberAndNameAndSeason(number,name,season) ?: new Episode(number:number,name:name,season:season,released:released,downloadInfo:[]).save(failOnError:true)
 			if (episode.downloadInfo.size() <= DOWNLOAD_LINKS_LIMIT) {
-				log.info "      Processing episode ${number} at ${url} ..."
+				log.info "      Processing episode ${number} at ${url} ... SIZE:${episode.downloadInfo.size()} LIMIT:${DOWNLOAD_LINKS_LIMIT}"
 				html(url).'**'.findAll{ it.@onclick =~ '.*frameLink.*'}.each{
-					Pattern pattern = Pattern.compile("'(.*?)'");
-					Matcher matcher = pattern.matcher(it.@onclick.text());
-					if (matcher.find()) {
-						def gateway = "${baseURL}/gateway.php?data=${matcher.group(1)}"
-						processDownloadInfo(provider,season,episode,gateway)
+					if (episode.downloadInfo.size() <= DOWNLOAD_LINKS_LIMIT) {
+						Pattern pattern = Pattern.compile("'(.*?)'");
+						Matcher matcher = pattern.matcher(it.@onclick.text());
+						if (matcher.find()) {
+							def gateway = "${baseURL}/gateway.php?data=${matcher.group(1)}"
+							processDownloadInfo(provider,season,episode,gateway)
+						}
 					}
 				}
 			}

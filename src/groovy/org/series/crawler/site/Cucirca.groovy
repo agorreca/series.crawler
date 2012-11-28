@@ -15,25 +15,9 @@ class Cucirca extends Site {
 	def baseURL = 'http://www.cucirca.com/'
 	def name() { 'Cucirca' }
 	def url()  { 'http://www.cucirca.com/' }
-	def serverURLReplacement = [
-		new ServerURLReplacement('(.*?)embed(.*?)embed.php\\?.*?v=(.*?)&.*?$', '$1www$2video/$3'),
-		new ServerURLReplacement('(.*?)player/embed.php\\?.*?v=(.*?)&.*?$','$1v/$2'),
-		new ServerURLReplacement('(.*?)embed-(.*?)-.*html$','$1$2')
-	]
 	def seriesToDownload = ['Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
 	def seriesWithProblems = ['How I Met Your Mother', 'One Tree Hill', 'Psych', 'The Simpsons', 'Two and a Half Men','Army Wives','Medium', 'Nip Tuck', 'Numb3rs']
 	def lastProcessedSerie = seriesWithProblems.last()
-
-	class ServerURLReplacement {
-		def regexp, replacement
-		ServerURLReplacement(String regexp, String replacement) {
-			this.regexp = regexp
-			this.replacement = replacement
-		}
-		def replace(String string) {
-			string.replaceAll(this.regexp, this.replacement)
-		}
-	}
 
 	@Override
 	public Object parse() {
