@@ -11,8 +11,7 @@ class SeriesCrawlerController {
 	def cucirca = new Cucirca()
 	def tvLinks = new TvLinks()
 	def animeFlv = new AnimeFLV()
-	def seriesToShow = ['Pretty Little Liars', 'Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
-	def providerToShow = ['Pretty Little Liars']
+	def seriesToShow = ['Pretty Little Liars', 'Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time','Alf','Revolution']
 
 	def show() {
 		def model = []
@@ -46,7 +45,7 @@ class SeriesCrawlerController {
 		def sites = [tvLinks,animeFlv,cucirca]
 //		sites = [cucirca]
 //		sites = [tvLinks]
-		sites = [animeFlv]
+//		sites = [animeFlv]
 		CrawlerUtils.crawlSites(sites)
 		render 'LISTO'
 //		redirect(action: "show")

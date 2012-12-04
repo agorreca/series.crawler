@@ -15,10 +15,15 @@ import org.series.crawler.Utils;
 
 class TvLinks extends Site {
 
-	def seriesToDownload = ['Lie To Me', 'Touch','Dexter','The Vampire Diaries','Once Upon a Time','The Big Bang Theory','Revolution']
+	def seriesToDownload = ['Lie To Me','Touch','Dexter','The Vampire Diaries','Once Upon a Time','The Big Bang Theory','Revolution','Alf','Homeland']
+//	def seriesToDownload = ['Once Upon a Time']
+//	def seriesToDownload = ['Dexter']
+//	def seriesWithProblems = ['$#*! My Dad Says',"'Orrible","'Til Death",'1 vs. 100','10 Items Or Less']
+//	def lastProcessedSerie = seriesWithProblems.last()
 	def baseURL = 'http://www.tv-links.eu'
 	def name() {'TvLinks'}
 	def url()  {'http://www.tv-links.eu/tv-shows/all_links'}
+	def DOWNLOAD_LINKS_LIMIT = 0
 
 	@Override
 	def parse() {
@@ -27,6 +32,7 @@ class TvLinks extends Site {
 			if (keepProcessing) {
 				def name = it.SPAN[0].text().replace('Updated!', '').trim()
 				if (name in seriesToDownload) {
+//				if (!(name in seriesWithProblems) && name > lastProcessedSerie) {
 					def year = it.SPAN[1].text()
 					def link = "${baseURL}${it.@href}"
 					def released = StringUtils.isBlank(year) ? null : new SimpleDateFormat('yyyy').parse(year)
@@ -42,6 +48,7 @@ class TvLinks extends Site {
 		if (keepProcessing) {
 			def serie = Serie.findByName(name) ?: new Serie(name:name,released:released,seasons:[]).save(failOnError:true)
 	 		def season
+			savePage = true
 			html(url).'**'.find{ it.@class == 'z_title cfix brd_l_dot'}.'*'.findAll{it.name().equalsIgnoreCase('div') || it.name().equalsIgnoreCase('ul')}.each { 
 				if (it.name().equalsIgnoreCase('div') && StringUtils.startsWith(it.@id.text(), 'dv_snr')) {
 					def seasonNumber = Integer.parseInt(it.@id.text().replaceAll(/[\D]/,''))
@@ -66,6 +73,7 @@ class TvLinks extends Site {
 	}
 
 	private void processEpisode(Provider provider, Season season, String url, String number, String name, Date released) {
+		savePage = false
 		if (keepProcessing) {
 			def episode = Episode.findByNumberAndNameAndSeason(number,name,season) ?: new Episode(number:number,name:name,season:season,released:released,downloadInfo:[]).save(failOnError:true)
 			if (episode.downloadInfo.size() <= DOWNLOAD_LINKS_LIMIT) {

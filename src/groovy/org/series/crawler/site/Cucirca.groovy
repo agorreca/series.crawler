@@ -16,7 +16,7 @@ class Cucirca extends Site {
 	def name() { 'Cucirca' }
 	def url()  { 'http://www.cucirca.com/' }
 	def seriesToDownload = ['Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
-	def seriesWithProblems = ['How I Met Your Mother', 'One Tree Hill', 'Psych', 'The Simpsons', 'Two and a Half Men','Army Wives','Medium', 'Nip Tuck', 'Numb3rs']
+	def seriesWithProblems = ['How I Met Your Mother', 'One Tree Hill', 'Psych', 'The Simpsons', 'Two and a Half Men','Army Wives','Medium', 'Nip Tuck', 'Numb3rs','Sex and the City']
 	def lastProcessedSerie = seriesWithProblems.last()
 
 	@Override
