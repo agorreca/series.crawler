@@ -42,7 +42,8 @@ class SeriesCrawlerController {
 	}
 
 	def fetch() {
-		def sites = [tvLinks,animeFlv,cucirca]
+//		def sites = [tvLinks,animeFlv,cucirca]
+		def sites = [tvLinks,cucirca]
 //		sites = [cucirca]
 //		sites = [tvLinks]
 //		sites = [animeFlv]

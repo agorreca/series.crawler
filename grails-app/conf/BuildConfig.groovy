@@ -57,7 +57,7 @@ grails.project.dependency.resolution = {
 //		compile ":famfamfam:1.0.1"
 		//compile ":spring-security-twitter:0.4.3"
 		//compile ":spring-security-facebook:0.9"
-
+		compile ":gpars:0.3"
 		build ":tomcat:$grailsVersion"
 	}
 }

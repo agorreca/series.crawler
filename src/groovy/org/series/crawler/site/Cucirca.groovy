@@ -12,6 +12,7 @@ import org.series.crawler.Utils
 
 class Cucirca extends Site {
 
+//	Cucirca() {super()}
 	def baseURL = 'http://www.cucirca.com/'
 	def name() { 'Cucirca' }
 	def url()  { 'http://www.cucirca.com/' }

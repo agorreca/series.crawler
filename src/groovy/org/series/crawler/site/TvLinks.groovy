@@ -15,6 +15,7 @@ import org.series.crawler.Utils;
 
 class TvLinks extends Site {
 
+//	TvLinks() {super()}
 	def seriesToDownload = ['Lie To Me','Touch','Dexter','The Vampire Diaries','Once Upon a Time','The Big Bang Theory','Revolution','Alf','Homeland']
 //	def seriesToDownload = ['Once Upon a Time']
 //	def seriesToDownload = ['Dexter']

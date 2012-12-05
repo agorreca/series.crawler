@@ -12,6 +12,7 @@ import org.series.crawler.Utils
 
 class AnimeFLV extends Site {
 
+//	AnimeFLV() {super()}
 	def baseURL = 'http://animeflv.net'
 	def name() {
 		'AnimeFLV'
