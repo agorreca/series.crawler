@@ -11,7 +11,7 @@ class SeriesCrawlerController {
 	def cucirca = new Cucirca()
 	def tvLinks = new TvLinks()
 	def animeFlv = new AnimeFLV()
-	def seriesToShow = ['Pretty Little Liars', 'Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time','Alf','Revolution']
+	def seriesToShow = ['Pretty Little Liars', 'Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time','Alf','Revolution','Homeland','The Booth at the End']
 
 	def show() {
 		def model = []

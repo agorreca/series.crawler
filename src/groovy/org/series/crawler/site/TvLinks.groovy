@@ -16,15 +16,19 @@ import org.series.crawler.Utils;
 class TvLinks extends Site {
 
 //	TvLinks() {super()}
-	def seriesToDownload = ['Lie To Me','Touch','Dexter','The Vampire Diaries','Once Upon a Time','The Big Bang Theory','Revolution','Alf','Homeland']
+	def seriesToDownload = ['The Booth at the End','Lie To Me','Touch','Dexter','The Vampire Diaries','Once Upon a Time','The Big Bang Theory','Revolution','Alf','Homeland']
 //	def seriesToDownload = ['Once Upon a Time']
+//	def seriesToDownload = ['The Vampire Diaries']
 //	def seriesToDownload = ['Dexter']
+//	def seriesToDownload = ['Homeland']
+//	def seriesToDownload = ['The Big Bang Theory']
+//	def seriesToDownload = ['The Booth at the End']
 //	def seriesWithProblems = ['$#*! My Dad Says',"'Orrible","'Til Death",'1 vs. 100','10 Items Or Less']
 //	def lastProcessedSerie = seriesWithProblems.last()
 	def baseURL = 'http://www.tv-links.eu'
 	def name() {'TvLinks'}
 	def url()  {'http://www.tv-links.eu/tv-shows/all_links'}
-	def DOWNLOAD_LINKS_LIMIT = 0
+	def DOWNLOAD_LINKS_LIMIT = 3
 
 	@Override
 	def parse() {
