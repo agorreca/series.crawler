@@ -28,7 +28,7 @@ class TvLinks extends Site {
 	def baseURL = 'http://www.tv-links.eu'
 	def name() {'TvLinks'}
 	def url()  {'http://www.tv-links.eu/tv-shows/all_links'}
-	def DOWNLOAD_LINKS_LIMIT = 3
+	def DOWNLOAD_LINKS_LIMIT = 4
 
 	@Override
 	def parse() {
