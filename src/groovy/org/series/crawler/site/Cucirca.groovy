@@ -16,8 +16,10 @@ class Cucirca extends Site {
 	def baseURL = 'http://www.cucirca.com/'
 	def name() { 'Cucirca' }
 	def url()  { 'http://www.cucirca.com/' }
-	def seriesToDownload = ['The Booth at the End','Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
-	def seriesWithProblems = ['How I Met Your Mother', 'One Tree Hill', 'Psych', 'The Simpsons', 'Two and a Half Men','Army Wives','Medium', 'Nip Tuck', 'Numb3rs','Sex and the City']
+//	def seriesToDownload = ['The Booth at the End','Lie To Me', 'The Big Bang Theory','Touch','Dexter','The Vampire Diaries','Once Upon a Time']
+	def seriesToDownload = ['How I Met Your Mother']
+//	def seriesWithProblems = ['How I Met Your Mother', 'One Tree Hill', 'Psych', 'The Simpsons', 'Two and a Half Men','Army Wives','Medium', 'Nip Tuck', 'Numb3rs','Sex and the City']
+	def seriesWithProblems = ['One Tree Hill', 'Psych', 'The Simpsons', 'Two and a Half Men','Army Wives','Medium', 'Nip Tuck', 'Numb3rs','Sex and the City']
 	def lastProcessedSerie = seriesWithProblems.last()
 
 	@Override
@@ -29,7 +31,8 @@ class Cucirca extends Site {
 					if (it.@href.text()) {
 						def name = it.text().trim()
 //						if (name in seriesToDownload && name > lastProcessedSerie) {
-						if (!(name in seriesWithProblems) && name > lastProcessedSerie) {
+//						if (!(name in seriesWithProblems) && name > lastProcessedSerie) {
+						if (!(name in seriesWithProblems)) {
 							def link = it.@href.text()
 							log.info "   Serie: ${name} at ${link}"
 							processSerie(link, provider, name)
@@ -43,7 +46,7 @@ class Cucirca extends Site {
 
 	private void processSerie(String url, Provider provider, String name) {
 		def serie = Serie.findByName(name) ?: new Serie(name:name,seasons:[]).save(failOnError:true)
-		html(url).'**'.findAll{ it.@class.text().startsWith('one_half') && it.@class.text().endsWith('flex_column')}.each {
+		html(url).'**'.findAll{ it.@class.text().contains('one_half') && it.@class.text().contains('flex_column')}.each {
 			if (it.'*'.size()) {
 				def nodeAux = it.'*'.find {it.name().equalsIgnoreCase('h2') || (it.name().equalsIgnoreCase('p') && it.text().contains('Season') && !it.text().contains('Episode'))}
 				def nodeAuxText =  nodeAux.text().contains('Season ') ? nodeAux.text() : nodeAux.childNodes().getAt(0).text()

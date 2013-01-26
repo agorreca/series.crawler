@@ -16,19 +16,20 @@ import org.series.crawler.Utils;
 class TvLinks extends Site {
 
 //	TvLinks() {super()}
-	def seriesToDownload = ['The Booth at the End','Lie To Me','Touch','Dexter','The Vampire Diaries','Once Upon a Time','The Big Bang Theory','Revolution','Homeland','How I Met Your Mother']
+//	def seriesToDownload = ['The Booth at the End','Lie To Me','Touch','Dexter','The Vampire Diaries','Once Upon a Time','The Big Bang Theory','Revolution','Homeland','How I Met Your Mother']
 //	def seriesToDownload = ['Once Upon a Time']
 //	def seriesToDownload = ['The Vampire Diaries']
 //	def seriesToDownload = ['Dexter']
 //	def seriesToDownload = ['Homeland']
 //	def seriesToDownload = ['The Big Bang Theory']
 //	def seriesToDownload = ['The Booth at the End']
+	def seriesToDownload = ['How I Met Your Mother']
 //	def seriesWithProblems = ['$#*! My Dad Says',"'Orrible","'Til Death",'1 vs. 100','10 Items Or Less']
 //	def lastProcessedSerie = seriesWithProblems.last()
 	def baseURL = 'http://www.tv-links.eu'
 	def name() {'TvLinks'}
 	def url()  {'http://www.tv-links.eu/tv-shows/all_links'}
-	def DOWNLOAD_LINKS_LIMIT = 4
+	def DOWNLOAD_LINKS_LIMIT = 1
 
 	@Override
 	def parse() {
@@ -60,7 +61,7 @@ class TvLinks extends Site {
 					log.info "     < Season ${seasonNumber} >"
 					season = Season.findByNumberAndSerie(seasonNumber,serie) ?: new Season(number:seasonNumber,serie:serie,episode:[]).save(failOnError:true)
 					serie.seasons << season
-				} else if(it.name().equalsIgnoreCase('ul') && it.@class=='table_shows') {
+				} else if(it.name().equalsIgnoreCase('ul') && it.@class.text().contains('table_shows')) {
 					it.'**'.findAll{it.@class && it.@class == 'list cfix' && it.@href.text()}.each{ ep ->
 						def episodeURL = "${baseURL}${ep.@href}video-results/"
 						def number = ep.SPAN[0].text().replace('Episode', '').trim()
